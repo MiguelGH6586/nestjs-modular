@@ -1,4 +1,14 @@
-import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToMany,
+} from 'typeorm';
+
+import { Product } from './product.entity';
 
 @Entity()
 export class Category {
@@ -11,4 +21,19 @@ export class Category {
     unique: true,
   })
   name: string;
+
+  @CreateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
+
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
+
+  @ManyToMany(() => Product, (product) => product.categories)
+  products: Product[];
 }
