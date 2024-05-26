@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, In } from 'typeorm';
+import { Repository, In, Between, FindOptionsWhere } from 'typeorm';
 
 import { Category } from '../entities/category.entity';
 import { Brand } from './../entities/brand.entity';
 import { Product } from './../entities/product.entity';
-import { CreateProductDto, UpdateProductDto } from './../dtos/products.dtos';
+import {
+  CreateProductDto,
+  UpdateProductDto,
+  FilterProductsDto,
+} from './../dtos/products.dtos';
 
 @Injectable()
 export class ProductsService {
@@ -16,7 +20,21 @@ export class ProductsService {
     @InjectRepository(Category) private categoryRepo: Repository<Category>,
   ) {}
 
-  findAll() {
+  findAll(params?: FilterProductsDto) {
+    if (params) {
+      const where: FindOptionsWhere<Product> = {};
+      const { limit, offset } = params;
+      const { minPrice, maxPrice } = params;
+      if (minPrice && maxPrice) {
+        where.price = Between(minPrice, maxPrice);
+      }
+      return this.productRepo.find({
+        relations: ['brand'],
+        where,
+        take: limit,
+        skip: offset,
+      });
+    }
     return this.productRepo.find({
       relations: ['brand'],
     });

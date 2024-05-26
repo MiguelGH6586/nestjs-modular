@@ -16,7 +16,11 @@ import { ApiTags, ApiOperation, ApiOkResponse } from '@nestjs/swagger';
 
 import { Response } from 'express';
 import { ParseIntPipe } from '../../common/parse-int.pipe';
-import { CreateProductDto, UpdateProductDto } from '../dtos/products.dtos';
+import {
+  CreateProductDto,
+  UpdateProductDto,
+  FilterProductsDto,
+} from '../dtos/products.dtos';
 
 import { ProductsService } from './../services/products.service';
 
@@ -28,15 +32,11 @@ export class ProductsController {
   @Get()
   @ApiOperation({ summary: 'List all products' })
   @ApiOkResponse()
-  getProducts(
-    @Query('limit') limit = 100,
-    @Query('offset') offset = 0,
-    @Query('brand') brand: string,
-  ) {
+  getProducts(@Query() params: FilterProductsDto) {
     // return {
     //   message: `products limit=> ${limit} offset=> ${offset} brand=> ${brand}`,
     // };
-    return this.productsService.findAll();
+    return this.productsService.findAll(params);
   }
 
   @Get('filter')
