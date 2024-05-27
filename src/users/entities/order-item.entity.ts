@@ -8,6 +8,8 @@ import {
   JoinTable,
   JoinColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
+
 import { Order } from './order.entity';
 import { Product } from '../../products/entities/product.entity';
 
@@ -24,6 +26,7 @@ export class OrderItem {
   })
   quantity: number;
 
+  @Exclude()
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamptz',
@@ -31,6 +34,7 @@ export class OrderItem {
   })
   createdAt: Date;
 
+  @Exclude()
   @UpdateDateColumn({
     name: 'updated_at',
     type: 'timestamptz',
