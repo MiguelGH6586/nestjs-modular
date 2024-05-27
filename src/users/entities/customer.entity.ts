@@ -11,36 +11,43 @@ import {
 import { User } from './user.entity';
 import { Order } from './order.entity';
 
-@Entity()
+@Entity({ name: 'customers' })
 export class Customer {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    name: 'id',
+  })
   id: number;
 
   @Column({
+    name: 'name',
     type: 'varchar',
     length: 255,
   })
   name: string;
 
   @Column({
+    name: 'last_name',
     type: 'varchar',
     length: 255,
   })
   lastName: string;
 
   @Column({
+    name: 'phone',
     type: 'varchar',
     length: 255,
   })
   phone: string;
 
   @CreateDateColumn({
+    name: 'created_at',
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
+    name: 'updated_at',
     type: 'timestamptz',
     default: () => 'CURRENT_TIMESTAMP',
   })
